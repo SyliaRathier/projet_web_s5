@@ -4,25 +4,44 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\QuantiteIngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: QuantiteIngredientRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Delete(),
+        new Patch(),
+        new Post(),
+        new GetCollection(),
+    ],
+    normalizationContext: ["groups" => ["quantiteIngredient:read"]],
+)]
 class QuantiteIngredient
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['quantiteIngredient:read', "recette:read"])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['quantiteIngredient:read', "recette:read"])]
     private ?float $quantite = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['quantiteIngredient:read', "recette:read"])]
     private ?string $unite = null;
 
     #[ORM\ManyToOne(inversedBy: 'quantiteIngredients')]
+    #[Groups(['quantiteIngredient:read', "recette:read"])]
     private ?Ingredient $idIngredient = null;
 
     #[ApiProperty(writable : false)]

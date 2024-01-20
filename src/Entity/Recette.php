@@ -2,34 +2,52 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\RecetteRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
-#[ApiResource]
-class Recette
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Delete(),
+        new Patch(),
+        new Post(),
+    ],
+    normalizationContext: ["groups" => ["recette:read"]],
+)]class Recette
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['recette:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recette:read'])]
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recette:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recette:read'])]
     private ?string $conseil = null;
 
     #[ORM\OneToMany(mappedBy: 'recette', targetEntity: QuantiteIngredient::class)]
+    #[Groups(['recette:read'])]
     private Collection $ingredients;
 
     #[ORM\ManyToMany(targetEntity: Materiel::class, inversedBy: 'recettes')]
+    #[Groups(['recette:read'])]
     private Collection $materiels;
 
     #[ORM\Column(length: 255)]
