@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\IngredientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,8 +24,12 @@ class Ingredient
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ApiProperty(writable : false)]
     #[ORM\OneToMany(mappedBy: 'idIngredient', targetEntity: QuantiteIngredient::class)]
     private Collection $quantiteIngredients;
+
+    #[ORM\Column]
+    private ?float $prix = null;
 
     public function __construct()
     {
@@ -86,6 +91,18 @@ class Ingredient
                 $quantiteIngredient->setIdIngredient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(float $prix): static
+    {
+        $this->prix = $prix;
 
         return $this;
     }

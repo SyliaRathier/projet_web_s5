@@ -29,9 +29,19 @@ class Recette
     #[ORM\OneToMany(mappedBy: 'recette', targetEntity: QuantiteIngredient::class)]
     private Collection $ingredients;
 
+    #[ORM\ManyToMany(targetEntity: Materiel::class, inversedBy: 'recettes')]
+    private Collection $materiels;
+
+    #[ORM\Column(length: 255)]
+    private ?string $duree = null;
+
+    #[ORM\Column]
+    private ?float $prix = null;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
+        $this->materiels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,4 +122,54 @@ class Recette
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Materiel>
+     */
+    public function getMateriels(): Collection
+    {
+        return $this->materiels;
+    }
+
+    public function addMateriel(Materiel $materiel): static
+    {
+        if (!$this->materiels->contains($materiel)) {
+            $this->materiels->add($materiel);
+        }
+
+        return $this;
+    }
+
+    public function removeMateriel(Materiel $materiel): static
+    {
+        $this->materiels->removeElement($materiel);
+
+        return $this;
+    }
+
+    public function getDuree(): ?string
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(string $duree): static
+    {
+        $this->duree = $duree;
+
+        return $this;
+    }
+
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(float $prix): static
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+
 }

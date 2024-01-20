@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\QuantiteIngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,6 +25,7 @@ class QuantiteIngredient
     #[ORM\ManyToOne(inversedBy: 'quantiteIngredients')]
     private ?Ingredient $idIngredient = null;
 
+    #[ApiProperty(writable : false)]
     #[ORM\ManyToOne(inversedBy: 'ingredients')]
     private ?Recette $recette = null;
 
