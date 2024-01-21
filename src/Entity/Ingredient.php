@@ -44,6 +44,7 @@ class Ingredient
 
     #[ApiProperty(writable : false)]
     #[ORM\OneToMany(mappedBy: 'idIngredient', targetEntity: QuantiteIngredient::class)]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     //#[Groups(['ingredient:read'])]
     private Collection $quantiteIngredients;
 

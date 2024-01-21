@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\RecetteRepository;
@@ -20,6 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(),
         new Patch(),
         new Post(),
+        new GetCollection(),
     ],
     normalizationContext: ["groups" => ["recette:read"]],
 )]class Recette
@@ -27,19 +30,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recette:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $conseil = null;
 
     #[ORM\OneToMany(mappedBy: 'recette', targetEntity: QuantiteIngredient::class)]
@@ -51,9 +54,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
     private Collection $materiels;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $duree = null;
 
     #[ORM\Column]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?float $prix = null;
 
     public function __construct()

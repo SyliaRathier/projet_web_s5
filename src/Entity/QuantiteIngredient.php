@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\QuantiteIngredientRepository;
@@ -21,6 +22,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Patch(),
         new Post(),
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients',
+            uriVariables: [
+                'idIngredient' => new Link(
+                    fromProperty: 'quantiteIngredients',
+                    fromClass: Ingredient::class
+                )
+            ],
+        ),
     ],
     normalizationContext: ["groups" => ["quantiteIngredient:read"]],
 )]
@@ -46,6 +56,7 @@ class QuantiteIngredient
 
     #[ApiProperty(writable : false)]
     #[ORM\ManyToOne(inversedBy: 'ingredients')]
+    #[Groups(['quantiteIngredient:read'])]
     private ?Recette $recette = null;
 
     public function getId(): ?int
