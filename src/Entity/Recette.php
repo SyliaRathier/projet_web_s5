@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -12,10 +13,12 @@ use App\Repository\RecetteRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
         new Get(),
@@ -23,6 +26,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Patch(),
         new Post(),
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
+            uriVariables: [
+                'idIngredient' => new Link(
+                    fromProperty: 'quantiteIngredients',
+                    fromClass: Ingredient::class
+                )
+            ],
+        ),
     ],
     normalizationContext: ["groups" => ["recette:read"]],
 )]class Recette
@@ -61,10 +73,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?float $prix = null;
 
+    #[ApiProperty(writable: false)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    private ?\DateTimeInterface $datePublication = null;
+
+    #[ORM\ManyToMany(targetEntity: CategorieRecette::class, mappedBy: 'recettes')]
+    private Collection $categorieRecettes;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
         $this->materiels = new ArrayCollection();
+        $this->categorieRecettes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -190,6 +211,45 @@ use Symfony\Component\Serializer\Annotation\Groups;
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getDatePublication(): ?\DateTimeInterface
+    {
+        return $this->datePublication;
+    }
+
+    public function setDatePublication(\DateTimeInterface $datePublication): static
+    {
+        $this->datePublication = $datePublication;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CategorieRecette>
+     */
+    public function getCategorieRecettes(): Collection
+    {
+        return $this->categorieRecettes;
+    }
+
+    public function addCategorieRecette(CategorieRecette $categorieRecette): static
+    {
+        if (!$this->categorieRecettes->contains($categorieRecette)) {
+            $this->categorieRecettes->add($categorieRecette);
+            $categorieRecette->addRecette($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategorieRecette(CategorieRecette $categorieRecette): static
+    {
+        if ($this->categorieRecettes->removeElement($categorieRecette)) {
+            $categorieRecette->removeRecette($this);
+        }
 
         return $this;
     }
