@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MaterielRepository::class)]
 #[ApiResource(
@@ -39,23 +40,44 @@ class Materiel
     #[Groups(['materiel:read', 'recette:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le nom est trop court! (2 caractères maximum)",
+        maxMessage: "Le nom est trop long! (50 caractères maximum)"
+    )]
+    #[ORM\Column(length: 50)]
     #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "La description est trop longue! (25 caractères maximum)"
+    )]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $description = null;
 
-    #[ORM\Column]
-    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
-    private mixed $prix = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true)]
+    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
+    private ?float $prix = null;
+
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le champs utilisation est trop long! (25 caractères maximum)"
+    )]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $utilisation = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le champs caractéristique est trop long! (25 caractères maximum)"
+    )]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $caractéristique = null;
 
