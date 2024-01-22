@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 #[ApiResource(
@@ -34,11 +36,23 @@ class Ingredient
     #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le nom est trop court! (2 caractères minimum)",
+        maxMessage: "Le nom est trop long! (50 caractères maximum)"
+    )]
+    #[ORM\Column(length: 50)]
     #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "La description est trop longue! (255 caractères maximum)"
+    )]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
     private ?string $description = null;
 
@@ -48,7 +62,7 @@ class Ingredient
     //#[Groups(['ingredient:read'])]
     private Collection $quantiteIngredients;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
     private ?float $prix = null;
 

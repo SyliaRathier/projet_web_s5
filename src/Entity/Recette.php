@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -45,15 +46,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min:2,
+        max: 50,
+        minMessage: "Le titre est trop court! (2 caractères maximum)",
+        maxMessage: "Le titre est trop long! (50 caractères maximum)"
+    )]
+    #[ORM\Column(length: 50)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $titre = null;
 
+    #[Assert\Length(
+        min:25,
+        max: 255,
+        minMessage: "La description est trop courte! (25 caractères maximum)",
+        maxMessage: "La description est trop longue! (255 caractères maximum)"
+    )]
     #[ORM\Column(length: 255)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $conseil = null;
 

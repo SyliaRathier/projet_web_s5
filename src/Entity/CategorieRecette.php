@@ -7,6 +7,7 @@ use App\Repository\CategorieRecetteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategorieRecetteRepository::class)]
 #[ApiResource]
@@ -17,7 +18,15 @@ class CategorieRecette
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: "Le nom est trop court! (2 caractères minimum)",
+        maxMessage: "Le nom est trop long! (50 caractères maximum)"
+    )]
+    #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
     #[ORM\ManyToMany(targetEntity: Recette::class, inversedBy: 'categorieRecettes')]
