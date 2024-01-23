@@ -33,7 +33,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ["groups" => ["recette:write"]],
             security: "is_granted('ROLE_USER')"
         ),
-        new GetCollection(),
+        new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/recettes',
+            uriVariables: [
+                'idUtilisateur' => new Link(
+                    fromProperty: 'recettes',
+                    fromClass: Utilisateur::class
+                )
+            ],
+        ),
         new GetCollection(
             uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
             uriVariables: [
