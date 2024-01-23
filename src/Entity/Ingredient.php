@@ -33,7 +33,7 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", 'categorie_ingredient:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -45,7 +45,7 @@ class Ingredient
         maxMessage: "Le nom est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", 'categorie_ingredient:read'])]
     private ?string $nom = null;
 
     #[Assert\Length(
@@ -53,7 +53,7 @@ class Ingredient
         maxMessage: "La description est trop longue! (255 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", 'categorie_ingredient:read'])]
     private ?string $description = null;
 
     #[ApiProperty(writable : false)]
@@ -63,7 +63,7 @@ class Ingredient
     private Collection $quantiteIngredients;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", 'categorie_ingredient:read'])]
     private ?float $prix = null;
 
     #[ORM\ManyToMany(targetEntity: CategorieIngredient::class, mappedBy: 'ingredients')]

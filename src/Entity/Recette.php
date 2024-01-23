@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -55,7 +55,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "Le titre est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
     private ?string $titre = null;
 
     #[Assert\Length(
@@ -65,7 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "La description est trop longue! (255 caractères maximum)"
     )]
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
