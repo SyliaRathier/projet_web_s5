@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -12,10 +13,13 @@ use App\Repository\RecetteRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
         new Get(),
@@ -23,6 +27,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Patch(),
         new Post(security: "is_granted('ROLE_USER')"),
         new GetCollection(),
+        new GetCollection(
+            uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
+            uriVariables: [
+                'idIngredient' => new Link(
+                    fromProperty: 'quantiteIngredients',
+                    fromClass: Ingredient::class
+                )
+            ],
+        ),
     ],
     normalizationContext: ["groups" => ["recette:read"]],
 )]class Recette
@@ -33,15 +46,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min:2,
+        max: 50,
+        minMessage: "Le titre est trop court! (2 caractères maximum)",
+        maxMessage: "Le titre est trop long! (50 caractères maximum)"
+    )]
+    #[ORM\Column(length: 50)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $titre = null;
 
+    #[Assert\Length(
+        min:25,
+        max: 255,
+        minMessage: "La description est trop courte! (25 caractères maximum)",
+        maxMessage: "La description est trop longue! (255 caractères maximum)"
+    )]
     #[ORM\Column(length: 255)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?string $conseil = null;
 
@@ -64,10 +91,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[ORM\ManyToOne(inversedBy: 'recettes')]
     private ?Utilisateur $utilisateur = null;
 
+    #[ApiProperty(writable: false)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    private ?\DateTimeInterface $datePublication = null;
+
+    #[ORM\ManyToMany(targetEntity: CategorieRecette::class, mappedBy: 'recettes')]
+    private Collection $categorieRecettes;
+
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
         $this->materiels = new ArrayCollection();
+        $this->categorieRecettes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,6 +241,42 @@ use Symfony\Component\Serializer\Annotation\Groups;
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
+
+      public function getDatePublication(): ?\DateTimeInterface
+    {
+        return $this->datePublication;
+    }
+
+    public function setDatePublication(\DateTimeInterface $datePublication): static
+    {
+        $this->datePublication = $datePublication;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CategorieRecette>
+     */
+    public function getCategorieRecettes(): Collection
+    {
+        return $this->categorieRecettes;
+    }
+
+    public function addCategorieRecette(CategorieRecette $categorieRecette): static
+    {
+        if (!$this->categorieRecettes->contains($categorieRecette)) {
+            $this->categorieRecettes->add($categorieRecette);
+            $categorieRecette->addRecette($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategorieRecette(CategorieRecette $categorieRecette): static
+    {
+        if ($this->categorieRecettes->removeElement($categorieRecette)) {
+            $categorieRecette->removeRecette($this);
+        }
 
         return $this;
     }
