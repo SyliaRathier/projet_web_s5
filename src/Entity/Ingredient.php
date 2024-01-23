@@ -139,7 +139,6 @@ class Ingredient
     {
         return $this->prix;
     }
-
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
