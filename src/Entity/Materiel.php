@@ -12,7 +12,10 @@ use App\Repository\MaterielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MaterielRepository::class)]
@@ -20,11 +23,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Delete(),
-        new Post(),
+        new Post(
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            denormalizationContext: ["groups" => ["materiel:write"]]
+        ),
         new Patch(),
     ],
     normalizationContext: ["groups" => ["materiel:read"]],
-)]class Materiel
+)]
+#[Vich\Uploadable]
+class Materiel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -41,7 +49,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "Le nom est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['materiel:read', 'recette:read'])]
+    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $nom = null;
 
     #[Assert\Length(
@@ -49,12 +57,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "La description est trop longue! (25 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['materiel:read', 'recette:read'])]
+    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $description = null;
 
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['materiel:read', 'recette:read'])]
+    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?float $prix = null;
 
     #[Assert\Length(
@@ -62,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "Le champs utilisation est trop long! (25 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['materiel:read', 'recette:read'])]
+    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $utilisation = null;
 
     #[Assert\Length(
@@ -70,12 +78,22 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "Le champs caractéristique est trop long! (25 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['materiel:read', 'recette:read'])]
+    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
     private ?string $caractéristique = null;
 
     #[ApiProperty(writable : false)]
     #[ORM\ManyToMany(targetEntity: Recette::class, mappedBy: 'materiels')]
     private Collection $recettes;
+
+    #[Vich\UploadableField(mapping: 'materiel', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Groups(['materiel:write'])]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
 
     public function __construct()
     {
@@ -172,5 +190,34 @@ use Symfony\Component\Validator\Constraints as Assert;
         }
 
         return $this;
+    }
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
     }
 }

@@ -15,7 +15,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
@@ -24,15 +27,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
-        new Patch(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
-        new Post(security: "is_granted('ROLE_USER')"),
-        new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/recettes',
-            uriVariables: [
-                'idUtilisateur' => new Link(
-                    fromProperty: 'recettes',
-                    fromClass: Utilisateur::class
-                )
-            ],),
+        new Patch(),
+        new Post(
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            denormalizationContext: ["groups" => ["recette:write"]],
+            security: "is_granted('ROLE_USER')"
+        ),
+        new GetCollection(),
         new GetCollection(
             uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
             uriVariables: [
@@ -44,12 +45,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ],
     normalizationContext: ["groups" => ["recette:read"]],
-)]class Recette
+)]
+#[Vich\Uploadable]
+class Recette
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -61,7 +64,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "Le titre est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $titre = null;
 
     #[Assert\Length(
@@ -71,28 +74,38 @@ use Symfony\Component\Validator\Constraints as Assert;
         maxMessage: "La description est trop longue! (255 caractères maximum)"
     )]
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $conseil = null;
 
     #[ORM\OneToMany(mappedBy: 'recette', targetEntity: QuantiteIngredient::class)]
-    #[Groups(['recette:read'])]
+    #[Groups(['recette:read', 'recette:write'])]
     private Collection $ingredients;
 
     #[ORM\ManyToMany(targetEntity: Materiel::class, inversedBy: 'recettes')]
-    #[Groups(['recette:read'])]
+    #[Groups(['recette:read', 'recette:write'])]
     private Collection $materiels;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write'])]
     private ?string $duree = null;
 
     #[ORM\Column]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
-    private ?float $prix = null;
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write'])]
+    private mixed $prix = null;
+
+    #[Vich\UploadableField(mapping: 'recette', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Groups(['recette:write'])]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'recettes')]
     private ?Utilisateur $utilisateur = null;
@@ -288,5 +301,34 @@ use Symfony\Component\Validator\Constraints as Assert;
         return $this;
     }
 
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
 
 }

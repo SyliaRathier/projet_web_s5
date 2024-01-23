@@ -1,0 +1,24 @@
+vich_uploader:
+    db_driver: orm
+
+    metadata:
+        type: attribute
+
+    mappings:
+        ingredient:
+            uri_prefix: /img/ingredient
+            upload_destination: '%kernel.project_dir%/public/img/ingredient'
+            # Will rename uploaded files using a uniqueid as a prefix.
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        materiel:
+            uri_prefix: /img/materiel
+            upload_destination: '%kernel.project_dir%/public/img/materiel'
+            # Will rename uploaded files using a uniqueid as a prefix.
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        recette:
+            uri_prefix: /img/recette
+            upload_destination: '%kernel.project_dir%/public/img/recette'
+            # Will rename uploaded files using a uniqueid as a prefix.
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
