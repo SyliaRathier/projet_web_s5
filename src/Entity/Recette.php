@@ -39,7 +39,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromProperty: 'recettes',
                     fromClass: Utilisateur::class
                 )
-            ],),
+            ],
+        ),
         new GetCollection(
             uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
             uriVariables: [
