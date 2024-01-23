@@ -22,9 +22,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new GetCollection(),
-        new Delete(),
-        new Post(),
-        new Patch(),
+        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
+        new Post(security: "is_granted('ROLE_USER')"),
+        new Patch(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
     ],
     normalizationContext: ["groups" => ["ingredient:read"]],
 )]

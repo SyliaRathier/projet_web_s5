@@ -24,9 +24,15 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
-        new Patch(),
+        new Patch(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
         new Post(security: "is_granted('ROLE_USER')"),
-        new GetCollection(),
+        new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/recettes',
+            uriVariables: [
+                'idUtilisateur' => new Link(
+                    fromProperty: 'recettes',
+                    fromClass: Utilisateur::class
+                )
+            ],),
         new GetCollection(
             uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
             uriVariables: [
@@ -241,6 +247,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
+    }
 
       public function getDatePublication(): ?\DateTimeInterface
     {
