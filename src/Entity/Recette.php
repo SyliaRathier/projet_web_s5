@@ -23,9 +23,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Delete(),
+        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
         new Patch(),
-        new Post(),
+        new Post(security: "is_granted('ROLE_USER')"),
         new GetCollection(),
         new GetCollection(
             uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
@@ -87,6 +87,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     #[ORM\Column]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?float $prix = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    private ?Utilisateur $utilisateur = null;
 
     #[ApiProperty(writable: false)]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -230,7 +233,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         return $this;
     }
 
-    public function getDatePublication(): ?\DateTimeInterface
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
+
+      public function getDatePublication(): ?\DateTimeInterface
     {
         return $this->datePublication;
     }
