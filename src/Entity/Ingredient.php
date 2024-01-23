@@ -42,7 +42,7 @@ class Ingredient
     #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
     private ?string $description = null;
 
-    #[ApiProperty(writable : false)]
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'idIngredient', targetEntity: QuantiteIngredient::class)]
     #[ORM\JoinColumn(onDelete: "CASCADE")]
     //#[Groups(['ingredient:read'])]
@@ -127,4 +127,6 @@ class Ingredient
 
         return $this;
     }
+
+
 }

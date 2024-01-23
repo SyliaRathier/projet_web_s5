@@ -19,9 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(),
-        new Delete(),
+        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
         new Patch(),
-        new Post(),
+        new Post(security: "is_granted('ROLE_USER')"),
         new GetCollection(),
     ],
     normalizationContext: ["groups" => ["recette:read"]],
@@ -60,6 +60,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     #[ORM\Column]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?float $prix = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recettes')]
+    private ?Utilisateur $utilisateur = null;
 
     public function __construct()
     {
@@ -190,6 +193,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }
