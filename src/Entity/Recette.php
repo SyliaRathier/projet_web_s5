@@ -52,7 +52,7 @@ class Recette
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recette:read', 'quantiteIngredient:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -64,7 +64,7 @@ class Recette
         maxMessage: "Le titre est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $titre = null;
 
     #[Assert\Length(
@@ -74,11 +74,11 @@ class Recette
         maxMessage: "La description est trop longue! (255 caractères maximum)"
     )]
     #[ORM\Column(length: 255)]
-    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $conseil = null;
 
     #[ORM\OneToMany(mappedBy: 'recette', targetEntity: QuantiteIngredient::class)]

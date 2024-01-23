@@ -40,7 +40,7 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", 'categorie_ingredient:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -51,8 +51,8 @@ class Ingredient
         minMessage: "Le nom est trop court! (2 caractères minimum)",
         maxMessage: "Le nom est trop long! (50 caractères maximum)"
     )]
-   #[ORM\Column(length: 255)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write"])]
+    #[ORM\Column(length: 50)]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write", 'categorie_ingredient:read'])]
     private ?string $nom = null;
 
     #[Assert\Length(
@@ -60,7 +60,7 @@ class Ingredient
         maxMessage: "La description est trop longue! (255 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write", 'categorie_ingredient:read'])]
     private ?string $description = null;
 
     #[ApiProperty(writable: false)]
@@ -70,7 +70,7 @@ class Ingredient
     private Collection $quantiteIngredients;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write"])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write", 'categorie_ingredient:read'])]
     private mixed $prix = null;
 
     #[Vich\UploadableField(mapping: 'ingredient', fileNameProperty: 'imageName', size: 'imageSize')]
