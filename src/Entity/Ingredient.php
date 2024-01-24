@@ -74,10 +74,11 @@ class Ingredient
     private mixed $prix = null;
 
     #[Vich\UploadableField(mapping: 'ingredient', fileNameProperty: 'imageName', size: 'imageSize')]
-    #[Groups(['ingredient:write'])]
+    #[Groups(['ingredient:write', 'ingredient:read' ])]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['ingredient:read' ])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]

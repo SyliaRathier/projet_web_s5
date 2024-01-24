@@ -50,6 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 )
             ],
         ),
+        new GetCollection(),
     ],
     normalizationContext: ["groups" => ["recette:read"]],
 )]
@@ -109,6 +110,7 @@ class Recette
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]
@@ -118,7 +120,7 @@ class Recette
     private ?Utilisateur $utilisateur = null;
 
     #[ApiProperty(writable: false)]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['recette:read', 'quantiteIngredient:read'])]
     private ?\DateTimeInterface $datePublication = null;
 
