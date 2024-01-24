@@ -100,12 +100,15 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword= null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
     private ?string $prenom = null;
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Recette::class)]
+    #[Groups(['utilisateur:read'])]
     private Collection $recettes;
 
     public function __construct()
