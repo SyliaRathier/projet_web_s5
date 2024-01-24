@@ -1,9 +1,9 @@
 doctrine:
     dbal:
-        dbname: projet_web_s5
+        dbname: app
         charset: utf8
         host: 127.0.0.1
-        port: 3309
+        port: 3307
         user: root
         password: root
         driver: pdo_mysql
