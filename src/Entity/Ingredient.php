@@ -78,6 +78,7 @@ class Ingredient
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", 'categorie_ingredient:read'])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]

@@ -63,7 +63,7 @@ class Materiel
 
     #[ORM\Column(nullable: true)]
     #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
-    private ?float $prix = null;
+    private mixed $prix = null;
 
     #[Assert\Length(
         max: 255,
