@@ -8,6 +8,10 @@ auth:
     path: /api/auth
     methods: ['POST']
 
+api_login_check:
+     path: /api/login_check
+     stateless: false
+
 #Route pour rafraichir notre JWT
 api_refresh_token:
     path: /api/token/refresh
