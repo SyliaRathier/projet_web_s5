@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\MaterielRepository;
@@ -27,6 +28,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             denormalizationContext: ["groups" => ["materiel:write"]]
+        ),
+        new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/materiels',
+            uriVariables: [
+                'idUtilisateur' => new Link(
+                    fromProperty: 'materiels',
+                    fromClass: Utilisateur::class
+                )
+            ],
         ),
         new Patch(),
         new GetCollection(),
@@ -96,6 +105,14 @@ class Materiel
 
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
+
+    #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'materiels')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['materiel:write', 'materiel:read'])]
+    private ?Utilisateur $utilisateur = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lien = null;
 
     public function __construct()
     {
@@ -221,5 +238,29 @@ class Materiel
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    public function getLien(): ?string
+    {
+        return $this->lien;
+    }
+
+    public function setLien(?string $lien): static
+    {
+        $this->lien = $lien;
+
+        return $this;
     }
 }

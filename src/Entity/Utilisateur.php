@@ -111,9 +111,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['utilisateur:read'])]
     private Collection $recettes;
 
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Materiel::class)]
+    #[Groups(['utilisateur:read'])]
+    private Collection $materiels;
+
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Ingredient::class)]
+    private Collection $ingredients;
+
     public function __construct()
     {
         $this->recettes = new ArrayCollection();
+        $this->materiels = new ArrayCollection();
+        $this->ingredients = new ArrayCollection();
     }
 
 
@@ -280,6 +289,66 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($recette->getUtilisateur() === $this) {
                 $recette->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Materiel>
+     */
+    public function getMateriels(): Collection
+    {
+        return $this->materiels;
+    }
+
+    public function addMateriel(Materiel $materiel): static
+    {
+        if (!$this->materiels->contains($materiel)) {
+            $this->materiels->add($materiel);
+            $materiel->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMateriel(Materiel $materiel): static
+    {
+        if ($this->materiels->removeElement($materiel)) {
+            // set the owning side to null (unless already changed)
+            if ($materiel->getUtilisateur() === $this) {
+                $materiel->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ingredient>
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): static
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients->add($ingredient);
+            $ingredient->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): static
+    {
+        if ($this->ingredients->removeElement($ingredient)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getUtilisateur() === $this) {
+                $ingredient->setUtilisateur(null);
             }
         }
 

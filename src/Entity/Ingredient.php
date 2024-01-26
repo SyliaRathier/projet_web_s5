@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\IngredientRepository;
@@ -29,6 +30,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             denormalizationContext: ["groups" => ["ingredient:write"]]
+        ),
+        new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/ingredients',
+            uriVariables: [
+                'idUtilisateur' => new Link(
+                    fromProperty: 'ingredients',
+                    fromClass: Utilisateur::class
+                )
+            ],
         ),
         new Patch(),
     ],
@@ -74,7 +83,7 @@ class Ingredient
     private mixed $prix = null;
 
     #[Vich\UploadableField(mapping: 'ingredient', fileNameProperty: 'imageName', size: 'imageSize')]
-    #[Groups(['ingredient:write', 'ingredient:read' ])]
+    #[Groups(['ingredient:write', 'ingredient:read'])]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
@@ -85,8 +94,15 @@ class Ingredient
     private ?int $imageSize = null;
 
     #[ORM\ManyToMany(targetEntity: CategorieIngredient::class, mappedBy: 'ingredients')]
-    #[Groups(['ingredient:read'])]
+    #[Groups(['ingredient:read', 'ingredient:write'])]
     private Collection $categorieIngredients;
+
+    #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'ingredients')]
+    #[Groups(['ingredient:read', 'ingredient:write'])]
+    private ?Utilisateur $utilisateur = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lien = null;
 
     public function __construct()
     {
@@ -218,5 +234,29 @@ class Ingredient
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    public function getLien(): ?string
+    {
+        return $this->lien;
+    }
+
+    public function setLien(?string $lien): static
+    {
+        $this->lien = $lien;
+
+        return $this;
     }
 }
