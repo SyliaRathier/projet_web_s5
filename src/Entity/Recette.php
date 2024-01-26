@@ -117,6 +117,7 @@ class Recette
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
     #[ORM\ManyToOne(inversedBy: 'recettes')]
     private ?Utilisateur $utilisateur = null;
 
@@ -126,6 +127,7 @@ class Recette
     private ?\DateTimeInterface $datePublication = null;
 
     #[ORM\ManyToMany(targetEntity: CategorieRecette::class, mappedBy: 'recettes')]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write'])]
     private Collection $categorieRecettes;
 
     public function __construct()
@@ -270,6 +272,7 @@ class Recette
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
+        return $this;
     }
 
       public function getDatePublication(): ?\DateTimeInterface
