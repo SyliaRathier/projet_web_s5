@@ -50,7 +50,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['utilisateur:read'])]
+    #[Groups(['utilisateur:read', 'recette:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -59,7 +59,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length (min: 4, max: 20,
         minMessage: 'Login trop court',
         maxMessage: 'Login trop long')]
-    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update', 'recette:read'])]
     private ?string $login = null;
 
     #[ORM\Column(nullable: true)]
@@ -76,12 +76,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(groups: ["utilisateur:create"])]
     #[Assert\NotNull(groups: ["utilisateur:create"])]
     #[Assert\Email(message: 'Email non valide')]
-    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update', 'recette:read'])]
     private ?string $adresseEmail = null;
 
     #[ApiProperty(readable: true, writable: false)]
     #[ORM\Column(options: ["default" => false])]
-    #[Groups(['utilisateur:read'])]
+    #[Groups(['utilisateur:read', 'recette:read'])]
     private ?bool $premium = false;
 
 
@@ -100,11 +100,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword= null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update', 'recette:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update', 'recette:read'])]
     private ?string $prenom = null;
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Recette::class)]
