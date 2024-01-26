@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
+        new Delete(security: "is_granted('ROLE_USER') and object.getUtilisateur() == user"),
         new Patch(),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
@@ -117,8 +117,9 @@ class Recette
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
+    #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'recettes')]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
-    #[ORM\ManyToOne(inversedBy: 'recettes')]
     private ?Utilisateur $utilisateur = null;
 
     #[ApiProperty(writable: false)]
@@ -286,6 +287,12 @@ class Recette
 
         return $this;
     }
+
+    #[ORM\PrePersist]
+    public function prePersistDatePublication() : void {
+        $this->datePublication = new \DateTime();
+    }
+
 
     /**
      * @return Collection<int, CategorieRecette>
