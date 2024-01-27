@@ -101,6 +101,7 @@ class Materiel
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['materiel:read'])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]
