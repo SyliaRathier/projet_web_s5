@@ -56,7 +56,7 @@ class QuantiteIngredient
 
     #[ApiProperty(writable : false)]
     #[ORM\ManyToOne(inversedBy: 'ingredients')]
-    #[Groups(['quantiteIngredient:read'])]
+    #[Groups(['quantiteIngredient:read', 'ingredient:read'])]
     private ?Recette $recette = null;
 
     public function getId(): ?int
