@@ -24,10 +24,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Delete(),
+        new Delete(security: "object.getOwner() == user"),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
-            denormalizationContext: ["groups" => ["materiel:write"]]
+            denormalizationContext: ["groups" => ["materiel:write"]],
         ),
         new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/materiels',
             uriVariables: [
@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 )
             ],
         ),
-        new Patch(),
+        new Patch(security: "object.getOwner() == user"),
         new GetCollection(),
     ],
     normalizationContext: ["groups" => ["materiel:read"]],
@@ -94,6 +94,7 @@ class Materiel
 
     #[ApiProperty(writable : false)]
     #[ORM\ManyToMany(targetEntity: Recette::class, mappedBy: 'materiels')]
+    #[Groups(['materiel:read'])]
     private Collection $recettes;
 
     #[Vich\UploadableField(mapping: 'materiel', fileNameProperty: 'imageName', size: 'imageSize')]
@@ -165,6 +166,12 @@ class Materiel
     {
         return $this->utilisation;
     }
+
+    public function getOwner(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
 
     public function setUtilisation(string $utilisation): static
     {
