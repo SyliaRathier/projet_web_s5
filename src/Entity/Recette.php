@@ -46,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: 'ingredients/{idIngredient}/quantite_ingredients/recettes',
             uriVariables: [
                 'idIngredient' => new Link(
-                    fromProperty: 'quantiteIngredients',
+                    fromProperty: 'quantite_ingredients',
                     fromClass: Ingredient::class
                 )
             ],
@@ -61,7 +61,7 @@ class Recette
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read', 'materiel:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read', 'materiel:read', 'ingredient:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
