@@ -26,8 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Delete(security: "is_granted('ROLE_USER') and object.getUtilisateur() == user"),
-        new Patch(),
+        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
+        new Patch(security: "object.getOwner() == user"),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             denormalizationContext: ["groups" => ["recette:write"]],
@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new GetCollection(
-            uriTemplate: '/ingredients/{idIngredient}/quantite_ingredients/recettes',
+            uriTemplate: 'ingredients/{idIngredient}/quantite_ingredients/recettes',
             uriVariables: [
                 'idIngredient' => new Link(
                     fromProperty: 'quantiteIngredients',
@@ -61,7 +61,7 @@ class Recette
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read', 'materiel:read'])]
     private ?int $id = null;
 
     #[Assert\NotNull]
@@ -269,6 +269,12 @@ class Recette
     {
         return $this->utilisateur;
     }
+
+    public function getOwner(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
 
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
