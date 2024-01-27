@@ -50,7 +50,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['utilisateur:read', 'recette:read'])]
+    #[Groups(['utilisateur:read', 'recette:read', 'ingredient:read', 'materiel:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -59,7 +59,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length (min: 4, max: 20,
         minMessage: 'Login trop court',
         maxMessage: 'Login trop long')]
-    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update', 'recette:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:create', 'utilisateur:update', 'recette:read', 'ingredient:read', 'materiel:read'])]
     private ?string $login = null;
 
     #[ORM\Column(nullable: true)]
