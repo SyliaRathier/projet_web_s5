@@ -35,16 +35,18 @@ class PremiumController extends AbstractController
     #[Route('/premium/checkout/confirm', name:'premiumCheckoutConfirm', methods: ['GET'])]
     public function premiumCheckoutConfirm(Request $request, PaymentHandlerInterface $paymentHandler, RouterInterface $router){
         $param = $request->get('session_id');
-        echo $param;
+        //echo $param;
         $res = $paymentHandler->checkPaymentStatus($param);
         if($res){
             $this->addFlash('success', 'Paiement confirmé. Vous êtes maintenant membre premium !');
-            return new Response(null, 200, ['Location' => 'http://127.0.0.1:5173/creerIngredient']);
+            //return new Response(null, 200, ['Location' => 'http://127.0.0.1:5173/creerIngredient']);
+            return $this->redirect('http://localhost:5173/connexion');
         }
         else{
             $this->addFlash('error', 'Une erreur est survenue lors du paiement. Veuillez réessayer');
             return new Response(null, 402, ['Location' => 'http://127.0.0.1:5173/premium']);
         }
+
 
     }
 }

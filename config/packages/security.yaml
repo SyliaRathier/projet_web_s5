@@ -11,6 +11,9 @@ security:
                 #La propriété avec laquelle l'utilisateur s'identifie
                 property: login
     firewalls:
+        premium_checkout_confirm:
+            pattern: ^/premium/checkout/confirm
+            stateless: false
         main:
             #L'application est sans état (pas de session)
             stateless: true
