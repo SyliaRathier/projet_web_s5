@@ -11,6 +11,9 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\MaterielRepository;
+use App\State\AuthorProcessor;
+use App\State\UtilisateurProcessor;
+use App\Validator\WriteLinkGroupGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,10 +28,17 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new Delete(security: "(is_granted('ROLE_USER') and object.getOwner() == user) or is_granted('ROLE_ADMIN')"),
-        new Post(
-            inputFormats: ['multipart' => ['multipart/form-data']],
-            denormalizationContext: ["groups" => ["materiel:write"]],
-        ),
+            new Post(
+                inputFormats: ['multipart' => ['multipart/form-data']],
+                denormalizationContext: [
+                    'groups' => ['write']
+                ],
+                security: "is_granted('ROLE_USER') and object.getOwner() == user",
+                validationContext: [
+                    'groups' => WriteLinkGroupGenerator::class
+                ],
+                processor: AuthorProcessor::class
+            ),
         new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/materiels',
             uriVariables: [
                 'idUtilisateur' => new Link(
@@ -37,7 +47,17 @@ use Symfony\Component\Validator\Constraints as Assert;
                 )
             ],
         ),
-        new Patch(security: "object.getOwner() == user"),
+        new Patch(),
+        new Patch(
+            denormalizationContext: [
+                'groups' => ['write']
+            ],
+            security: "object.getOwner() == user",
+            validationContext: [
+                'groups' => WriteLinkGroupGenerator::class
+            ],
+            processor: AuthorProcessor::class
+        ),
         new GetCollection(),
     ],
     normalizationContext: ["groups" => ["materiel:read"]],
@@ -60,7 +80,7 @@ class Materiel
         maxMessage: "Le nom est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
+    #[Groups(['materiel:read', 'recette:read', 'write'])]
     private ?string $nom = null;
 
     #[Assert\Length(
@@ -68,12 +88,12 @@ class Materiel
         maxMessage: "La description est trop longue! (25 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
+    #[Groups(['materiel:read', 'recette:read', 'write'])]
     private ?string $description = null;
 
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
+    #[Groups(['materiel:read', 'recette:read', 'write'])]
     private mixed $prix = null;
 
     #[Assert\Length(
@@ -81,7 +101,7 @@ class Materiel
         maxMessage: "Le champs utilisation est trop long! (25 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
+    #[Groups(['materiel:read', 'recette:read', 'write'])]
     private ?string $utilisation = null;
 
     #[Assert\Length(
@@ -89,7 +109,7 @@ class Materiel
         maxMessage: "Le champs caractéristique est trop long! (25 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['materiel:read', 'recette:read', 'materiel:write'])]
+    #[Groups(['materiel:read', 'recette:read', 'write'])]
     private ?string $caractéristique = null;
 
     #[ApiProperty(writable : false)]
@@ -98,7 +118,7 @@ class Materiel
     private Collection $recettes;
 
     #[Vich\UploadableField(mapping: 'materiel', fileNameProperty: 'imageName', size: 'imageSize')]
-    #[Groups(['materiel:write'])]
+    #[Groups(['write'])]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
@@ -109,11 +129,15 @@ class Materiel
     private ?int $imageSize = null;
 
     #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'materiels')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['materiel:write', 'materiel:read'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ApiProperty(writable: false)]
+    #[Groups(['materiel:read'])]
     private ?Utilisateur $utilisateur = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Blank(groups: ["write"], message: "Le lien ne peut pas être renseigné pour les utilisateurs non premium")]
+    #[Assert\Url(message: "Le lien doit être une URL valide", protocols: ['http', 'https'], groups: ["premium"])]
+    #[Groups(["materiel:read","write","premium"])]
     private ?string $lien = null;
 
     public function __construct()
@@ -256,7 +280,6 @@ class Materiel
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
-
         return $this;
     }
 

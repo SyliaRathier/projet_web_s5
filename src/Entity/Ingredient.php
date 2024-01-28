@@ -11,11 +11,14 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\IngredientRepository;
+use App\State\AuthorProcessor;
+use App\Validator\WriteLinkGroupGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,7 +32,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "(is_granted('ROLE_USER') and object.getOwner() == user) or is_granted('ROLE_ADMIN')"),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
-            denormalizationContext: ["groups" => ["ingredient:write"]],
+            denormalizationContext: ["groups" => ["write"]],
+            security: "is_granted('ROLE_USER')",
+            validationContext: ["groups" => WriteLinkGroupGenerator::class],
+            processor: AuthorProcessor::class
         ),
         new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/ingredients',
             uriVariables: [
@@ -39,7 +45,12 @@ use Symfony\Component\Validator\Constraints as Assert;
                 )
             ],
         ),
-        new Patch(security: "object.getOwner() == user"),
+        new Patch(
+            denormalizationContext: ["groups" => ["write"]],
+            security: "is_granted('ROLE_USER') and object.getOwner() == user",
+            validationContext: ["groups" => WriteLinkGroupGenerator::class],
+            processor: AuthorProcessor::class
+        ),
     ],
     normalizationContext: ["groups" => ["ingredient:read"]],
 )]
@@ -61,7 +72,7 @@ class Ingredient
         maxMessage: "Le nom est trop long! (50 caractères maximum)"
     )]
     #[ORM\Column(length: 50)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write", 'categorie_ingredient:read'])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "write", 'categorie_ingredient:read'])]
     private ?string $nom = null;
 
     #[Assert\Length(
@@ -69,7 +80,7 @@ class Ingredient
         maxMessage: "La description est trop longue! (255 caractères maximum)"
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write", 'categorie_ingredient:read'])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "write", 'categorie_ingredient:read'])]
     private ?string $description = null;
 
     #[ApiProperty(writable: false)]
@@ -79,11 +90,11 @@ class Ingredient
     private Collection $quantiteIngredients;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "ingredient:write", 'categorie_ingredient:read'])]
+    #[Groups(['ingredient:read', "quantiteIngredient:read", "recette:read", "write", 'categorie_ingredient:read'])]
     private mixed $prix = null;
 
     #[Vich\UploadableField(mapping: 'ingredient', fileNameProperty: 'imageName', size: 'imageSize')]
-    #[Groups(['ingredient:write', 'ingredient:read'])]
+    #[Groups(['write', 'ingredient:read'])]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
@@ -94,14 +105,19 @@ class Ingredient
     private ?int $imageSize = null;
 
     #[ORM\ManyToMany(targetEntity: CategorieIngredient::class, mappedBy: 'ingredients')]
-    #[Groups(['ingredient:read', 'ingredient:write'])]
+    #[Groups(['ingredient:read', 'write'])]
     private Collection $categorieIngredients;
 
     #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'ingredients')]
-    #[Groups(['ingredient:read', 'ingredient:write'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ApiProperty(writable: false)]
+    #[Groups(['ingredient:read'])]
     private ?Utilisateur $utilisateur = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Blank(groups: ["write"], message: "Le lien ne peut pas être renseigné pour les utilisateurs non premium")]
+    #[Assert\Url(message: "Le lien doit être une URL valide", protocols: ['http', 'https'], groups: ["premium"])]
+    #[Groups(["materiel:read","write","premium"])]
     private ?string $lien = null;
 
     public function __construct()
@@ -249,7 +265,6 @@ class Ingredient
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
-
         return $this;
     }
 

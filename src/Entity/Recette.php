@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\RecetteRepository;
 use ApiPlatform\Metadata\ApiResource;
+use App\State\AuthorProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -26,12 +27,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new Delete(security: "(is_granted('ROLE_USER') and object.getOwner() == user) or is_granted('ROLE_ADMIN')"),
-        new Patch(security: "object.getOwner() == user"),
+        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
+        new Patch(
+            denormalizationContext: ["groups" => ["recette:write"]],
+            security: "is_granted('ROLE_USER') and object.getOwner() == user ",
+            processor: AuthorProcessor::class,
+        ),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             denormalizationContext: ["groups" => ["recette:write"]],
-            security: "is_granted('ROLE_USER')"
+            security: "is_granted('ROLE_USER') ",
+            processor: AuthorProcessor::class
         ),
         new GetCollection(),
         new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/recettes',
@@ -118,8 +124,9 @@ class Recette
     private ?int $imageSize = null;
 
     #[ORM\ManyToOne(fetch: "EAGER", inversedBy: 'recettes')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['recette:read', 'quantiteIngredient:read', 'recette:write', 'categorie_recette:read'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ApiProperty(writable: false)]
+    #[Groups(['recette:read', 'quantiteIngredient:read', 'categorie_recette:read'])]
     private ?Utilisateur $utilisateur = null;
 
     #[ApiProperty(writable: false)]

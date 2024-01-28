@@ -18,9 +18,8 @@ class PaymentHandler implements PaymentHandlerInterface
 
     public function __construct(
         //Injection du paramètre dossier_photo_profil
-        #[Autowire('%api_key%')] private string $apiKey,
+        #[Autowire('%api_key%')] private string  $stripeKey,
         #[Autowire('%premium_price%')] private string $premiumPrice,
-        #[Autowire('%signature_secrete%')] private string $signatureSecrete,
         private RouterInterface $router,
         private UtilisateurRepository $utilisateurRepository,
         private EntityManagerInterface $entityManager
@@ -30,20 +29,18 @@ class PaymentHandler implements PaymentHandlerInterface
     //Génère et renvoie un lien vers Stripe afin de finaliser l'achat du statut Premium pour l'utilisateur passé en paramètre.
     public function getPremiumCheckoutUrlFor(Utilisateur $utilisateur)  : string
     {
-        var_dump($utilisateur);
-        echo $utilisateur->getId();
         $paymentData = [
             'mode' => 'payment',
             'payment_intent_data' => ['capture_method' => 'manual', 'receipt_email' => $utilisateur->getAdresseEmail()],
             'customer_email' => $utilisateur->getAdresseEmail(),
             'success_url' => $this->router->generate('premiumCheckoutConfirm', [],UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => $this->router->generate('premiumInfos',[], UrlGeneratorInterface::ABSOLUTE_URL),
-            "metadata" => ["data" => $utilisateur->getId(), "student_token" => 'Sylia'],
+            "metadata" => ["user_id" => $utilisateur->getId()],
             "line_items" => [
                 [
                     "price_data" => [
                         "currency" => "eur",
-                        "product_data" => ["name" => "The Feed Premium"],
+                        "product_data" => ["name" => "Recette Premium"],
                         "unit_amount" => $this->premiumPrice * 100
                     ],
                     "quantity" => 1
@@ -51,12 +48,9 @@ class PaymentHandler implements PaymentHandlerInterface
                 ]
             ]
         ];
-        //Stripe::setApiKey($this->apiKey);
-        $stripe = new StripeClient($this->apiKey);
-        $stripeSession = $stripe->checkout->sessions->create($paymentData);
-        //$stripeSession = Session::create($paymentData);
+        Stripe::setApiKey($this->stripeKey);
+        $stripeSession = Session::create($paymentData);
         $url = $stripeSession->url;
-        var_dump($url);
         return $url;
 
     }
@@ -88,18 +82,16 @@ class PaymentHandler implements PaymentHandlerInterface
     }
 
     public function checkPaymentStatus($sessionId) : bool {
-        echo 'echo8';
-        $stripe = new StripeClient($this->apiKey);
+        $stripe = new StripeClient($this->stripeKey);
         $session = $stripe->checkout->sessions->retrieve($sessionId);
+        echo $session;
         $paymentIntentId = $session->payment_intent;
         $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId);
         $status = $paymentIntent->status;
         $capture= false;
         if($status == "succeeded"){
             $capture=true;
-            echo 'echo9';
         }
-        echo $capture;
         return $capture;
 
     }

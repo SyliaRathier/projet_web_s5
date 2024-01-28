@@ -4,13 +4,14 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+premium_checkout_confirm:
+   path: /premium/checkout/confirm
+   stateless: false
+
 auth:
     path: /api/auth
     methods: ['POST']
 
-api_login_check:
-     path: /api/login_check
-     stateless: false
 
 #Route pour rafraichir notre JWT
 api_refresh_token:
@@ -19,3 +20,5 @@ api_refresh_token:
 #Route pour invalider notre token de rafraichissement (le supprimer). utile pour se "déconnecter" réellement.
 api_token_invalidate:
     path: /api/token/invalidate
+
+
