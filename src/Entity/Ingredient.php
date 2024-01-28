@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new GetCollection(),
-        new Delete(security: "is_granted('ROLE_USER') and object.getOwner() == user"),
+        new Delete(security: "(is_granted('ROLE_USER') and object.getOwner() == user) or is_granted('ROLE_ADMIN')"),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
             denormalizationContext: ["groups" => ["ingredient:write"]],
