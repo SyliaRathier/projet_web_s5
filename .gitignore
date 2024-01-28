@@ -17,5 +17,6 @@
 /.idea
 symfony.exe
 /.env
+.env
 .database-data/
 ```
