@@ -7,7 +7,7 @@ use App\Entity\Ingredient;
 use Symfony\Component\Security\Core\Security;
 
 
-class PublicationVoter extends Voter
+class IngredientVoter extends Voter
 {
     public const DELETE = 'INGREDIENT_DELETE';
 
