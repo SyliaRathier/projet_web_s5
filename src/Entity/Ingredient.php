@@ -26,10 +26,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new GetCollection(),
-        new Delete(),
+        new Delete(security: "(is_granted('ROLE_USER') and object.getOwner() == user) or is_granted('ROLE_ADMIN')"),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],
-            denormalizationContext: ["groups" => ["ingredient:write"]]
+            denormalizationContext: ["groups" => ["ingredient:write"]],
         ),
         new GetCollection(uriTemplate: 'utilisateurs/{idUtilisateur}/ingredients',
             uriVariables: [
@@ -39,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 )
             ],
         ),
-        new Patch(),
+        new Patch(security: "object.getOwner() == user"),
     ],
     normalizationContext: ["groups" => ["ingredient:read"]],
 )]
@@ -75,7 +75,7 @@ class Ingredient
     #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'idIngredient', targetEntity: QuantiteIngredient::class)]
     #[ORM\JoinColumn(onDelete: "CASCADE")]
-    //#[Groups(['ingredient:read'])]
+    #[Groups(['ingredient:read'])]
     private Collection $quantiteIngredients;
 
     #[ORM\Column(nullable: true)]
@@ -237,6 +237,11 @@ class Ingredient
     }
 
     public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function getOwner(): ?Utilisateur
     {
         return $this->utilisateur;
     }

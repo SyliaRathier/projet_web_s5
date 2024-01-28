@@ -63,6 +63,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $login = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['utilisateur:read', 'ingredient:read'])]
     private array $roles = [];
 
     /**
