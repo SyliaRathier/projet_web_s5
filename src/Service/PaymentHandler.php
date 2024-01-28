@@ -18,8 +18,9 @@ class PaymentHandler implements PaymentHandlerInterface
 
     public function __construct(
         //Injection du paramètre dossier_photo_profil
-        #[Autowire('%api_key%')] private string  $stripeKey,
+        #[Autowire('%api_key%')] private string $apiKey,
         #[Autowire('%premium_price%')] private string $premiumPrice,
+        #[Autowire('%signature_secrete%')] private string $signatureSecrete,
         private RouterInterface $router,
         private UtilisateurRepository $utilisateurRepository,
         private EntityManagerInterface $entityManager
@@ -35,12 +36,12 @@ class PaymentHandler implements PaymentHandlerInterface
             'customer_email' => $utilisateur->getAdresseEmail(),
             'success_url' => $this->router->generate('premiumCheckoutConfirm', [],UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => $this->router->generate('premiumInfos',[], UrlGeneratorInterface::ABSOLUTE_URL),
-            "metadata" => ["user_id" => $utilisateur->getId()],
+            "metadata" => ["data" => $utilisateur->getId(), "student_token" => 'Sylia'],
             "line_items" => [
                 [
                     "price_data" => [
                         "currency" => "eur",
-                        "product_data" => ["name" => "Recette Premium"],
+                        "product_data" => ["name" => "The Feed Premium"],
                         "unit_amount" => $this->premiumPrice * 100
                     ],
                     "quantity" => 1
@@ -48,9 +49,12 @@ class PaymentHandler implements PaymentHandlerInterface
                 ]
             ]
         ];
-        Stripe::setApiKey($this->stripeKey);
-        $stripeSession = Session::create($paymentData);
+        //Stripe::setApiKey($this->apiKey);
+        $stripe = new StripeClient($this->apiKey);
+        $stripeSession = $stripe->checkout->sessions->create($paymentData);
+        //$stripeSession = Session::create($paymentData);
         $url = $stripeSession->url;
+        var_dump($url);
         return $url;
 
     }
@@ -82,9 +86,8 @@ class PaymentHandler implements PaymentHandlerInterface
     }
 
     public function checkPaymentStatus($sessionId) : bool {
-        $stripe = new StripeClient($this->stripeKey);
+        $stripe = new StripeClient($this->apiKey);
         $session = $stripe->checkout->sessions->retrieve($sessionId);
-        echo $session;
         $paymentIntentId = $session->payment_intent;
         $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId);
         $status = $paymentIntent->status;
