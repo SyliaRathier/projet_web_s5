@@ -7,15 +7,15 @@ Harribaud Kim
 
 Hébergement sur serveur de l'IUT
 
-MyAvatar: 
+MyAvatar:  https://webinfo.iutmontp.univ-montp2.fr/~henchiria/MyAvatar/myAvatar/public/ ( Noté que nous n'avons pas les droits pour installer tailwind css sur le répertoire de l'iut )
 COSMETIPS API : https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api
 COSMETIPS VueJS : https://webinfo.iutmontp.univ-montp2.fr/~henchiria/frontend/dist/
 
 Répertoire GitHub
 
 MyAvatar : https://github.com/AdamHenchiri/MyAvatar/tree/main
-Popotion API : https://github.com/SyliaRathier/projet_web_s5
-Popotion VueJS : https://github.com/SyliaRathier/vue_projet_s5
+Cosmetips API : https://github.com/SyliaRathier/projet_web_s5
+Cosmetips VueJS : https://github.com/SyliaRathier/vue_projet_s5
 
 **Le thème**
 Pour ce projet, nous avons choisi le thème des cosmétiques. Il consiste à répertorier des recettes de cosmétiques créées par les utilisateurs en détaillant les ingrédients et le matériel nécessaire. 
@@ -61,6 +61,6 @@ Identifiant / Login
 Popotion VueJS & API
 Idnetifiants de test :
 
-login: adamax,
-password: Adamaxaumaxdepuis2002
+login: sarahb,
+password: Sarahbettinger2002
 
