@@ -47,7 +47,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 )
             ],
         ),
-        new Patch(),
         new Patch(
             denormalizationContext: [
                 'groups' => ['write']
