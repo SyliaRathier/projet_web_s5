@@ -159,3 +159,1258 @@ npm run dev
 ![data](https://hackmd.io/_uploads/HyHKaiP9T.png)
 
 
+
+
+
+
+```jsonld
+{
+	"info": {
+		"_postman_id": "f2a3e629-4315-467c-b3c0-6d2a3f9e9aa6",
+		"name": "S5_Recipe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32539238"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GetAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/utilisateurs",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"utilisateurs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateUser",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"adama\",\r\n  \"adresseEmail\": \"adam@example.com\",\r\n  \"plainPassword\": \"OOxi0BnyrX2bvIegmJESBik075Pps\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/utilisateurs",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"utilisateurs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUser/id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/utilisateurs/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"utilisateurs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/utilisateurs/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"utilisateurs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"login\": \"string\",\r\n  \"adresseEmail\": \"user@example.com\",\r\n  \"plainPassword\": \"fwlU1hfMkA2FmzdoMGQOUp\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/utilisateurs/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"utilisateurs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stuff",
+			"item": [
+				{
+					"name": "CreateStuff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nom",
+									"value": "Étiquettes pour l'identification",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Des étiquettes adhésives ou attachées au produit pour indiquer son contenu et d'autres informations.",
+									"type": "text"
+								},
+								{
+									"key": "prix",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "utilisation",
+									"value": "Identifier les produits finis, lister les ingrédients et les instructions.",
+									"type": "text"
+								},
+								{
+									"key": "caractéristique",
+									"value": "Facilite l'organisation et l'identification.",
+									"type": "text"
+								},
+								{
+									"key": "imageFile",
+									"type": "file",
+									"src": "/C:/Users/adamh/Pictures/Étiquettes pour l'identification.jpeg"
+								},
+								{
+									"key": "lien",
+									"value": "https://bit.ly/3ubyisi",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "utilisateur",
+									"value": "http://localhost:8000/api/utilisateurs/1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/materiels",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"materiels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetStuff/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/materiels/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"materiels",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteStuff/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/materiels/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"materiels",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditStuff/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nom\": \"string\",\r\n  \"description\": \"string\",\r\n  \"prix\": 0,\r\n  \"utilisation\": \"string\",\r\n  \"caractéristique\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/materiels/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"materiels",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recipe",
+			"item": [
+				{
+					"name": "GetRecipe/idIngredient",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients/{idIngredient}/quantite_ingredients/recettes",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients",
+								"{idIngredient}",
+								"quantite_ingredients",
+								"recettes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateRecipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "titre",
+									"value": "Sérum Anti-Âge à la Rose",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Un sérum riche en ingrédients anti-âge pour nourrir et régénérer la peau.",
+									"type": "text"
+								},
+								{
+									"key": "conseil",
+									"value": "mettre des gants",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "[\"http://localhost:8000/api/quantite_ingredients/7\"]",
+									"type": "text"
+								},
+								{
+									"key": "materiels",
+									"value": "[\"http://localhost:8000/api/materiels/7\", \"http://localhost:8000/api/materiels/9\"]",
+									"type": "text"
+								},
+								{
+									"key": "duree",
+									"value": "40Min",
+									"type": "text"
+								},
+								{
+									"key": "prix",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "utilisateur",
+									"value": "http://localhost:8000/api/utilisateurs/1",
+									"type": "text"
+								},
+								{
+									"key": "imageFile",
+									"type": "file",
+									"src": "/C:/Users/adamh/Pictures/Sérum Anti-Âge à la Rose.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/recettes",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"recettes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllRecette",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/recettes",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"recettes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecipe/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/recettes/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"recettes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteRecipe/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/recettes/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"recettes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditRecipe/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/recettes/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"recettes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecipe/idUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/utilisateurs/1/recettes",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"utilisateurs",
+								"1",
+								"recettes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingredient",
+			"item": [
+				{
+					"name": "GetAllIngredient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateIngredient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nom",
+									"value": "Argile Rouge",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "L'argile rouge est riche en fer et est souvent utilisee pour revitaliser la peau",
+									"type": "text"
+								},
+								{
+									"key": "prix",
+									"value": "2.9",
+									"type": "text"
+								},
+								{
+									"key": "imageFile",
+									"type": "file",
+									"src": "/C:/Users/adamh/Pictures/Argile Rouge.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetIngredient/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients/15",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteIngredient/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditIngredient/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nom\": \"string\",\r\n  \"description\": \"string\",\r\n  \"prix\": \"string\",\r\n  \"categorieIngredients\": [\r\n    \"https://example.com/\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categoryIngredient",
+			"item": [
+				{
+					"name": "GetAllCategoryIngredient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateCategoryIngredient",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nom\": \"Argiles\",\r\n  \"ingredients\": [\r\n        \"http://localhost:8000/api/ingredients/17\",\r\n       \"http://localhost:8000/api/ingredients/18\",\r\n       \"http://localhost:8000/api/ingredients/19\",\r\n       \"http://localhost:8000/api/ingredients/20\",\r\n       \"http://localhost:8000/api/ingredients/21\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategoryIngredient/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_ingredients/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_ingredients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCategoryIngredient/id",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_ingredients/7",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_ingredients",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditCategoryIngredient/id",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ingredients\": [\r\n       \"http://localhost:8000/api/ingredients/17\",\r\n       \"http://localhost:8000/api/ingredients/18\",\r\n       \"http://localhost:8000/api/ingredients/19\",\r\n       \"http://localhost:8000/api/ingredients/20\",\r\n       \"http://localhost:8000/api/ingredients/21\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_ingredients/7",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_ingredients",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categoryRecipe",
+			"item": [
+				{
+					"name": "GetAllCategoryRecipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_recettes",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_recettes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateCategoryRecipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nom\": \"Remèdes Naturels\",\r\n  \"recettes\": [\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_recettes",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_recettes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategoryRecipe/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_recettes/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_recettes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCategoryRecipe/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_recettes/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_recettes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditCategoryRecipe/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nom\": \"string\",\r\n  \"ingredients\": [\r\n    \"https://example.com/\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/categorie_recettes/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"categorie_recettes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QuantityIngredient",
+			"item": [
+				{
+					"name": "GetAllQuantityIngredient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/quantite_ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"quantite_ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQuantityIngredient/idIngredient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/ingredients/1/quantite_ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"ingredients",
+								"1",
+								"quantite_ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateQuantityIngredient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantite\": 350,\r\n  \"unite\": \"ml\",\r\n  \"idIngredient\": \"http://localhost:8000/api/ingredients/11\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/quantite_ingredients",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"quantite_ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteQuantityIngredient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/quantite_ingredients/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"quantite_ingredients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQuantityIngredient/id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "EditQuantityIngredient/id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/api/quantite_ingredients/1",
+							"protocol": "https",
+							"host": [
+								"webinfo",
+								"iutmontp",
+								"univ-montp2",
+								"fr"
+							],
+							"path": [
+								"~rathiers",
+								"projet_web",
+								"public",
+								"api",
+								"quantite_ingredients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MDY1MjE2NTksImV4cCI6MTcwNjUyNTI1OSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiYWRhbWF4IiwiaWQiOjEsImFkcmVzc2VNYWlsIjoiYWRhbWF4QGV4YW1wbGUuY29tIiwicHJlbWl1bSI6ZmFsc2V9.AsnRMW66S-sXL-YdbdKfnUv3_M-bM7p0DeNRIRcP6TCmrivXJf-URXmVrrbMtWMEkKSHDa6HAJrcNV5NdB8ZGSr5XpTlsJyXYcktEkdFtcj-AOYgyxlqyWo1Sq6MVxlEcNmd8YqbRDDLO2MmybQjrnDkOe5juMwpW8O9f_wG8hHYarIo3thcDoYwPp9JeaF8YzJuBw5e51sMlGSUgmQtVvTriVFgDzxsTxUYv-4rCMQclAASCkJAPfPqKf-2t50Y12qx4zBa3y94ColV0pLUMgXHP___o_C3hp96i9e0sypXptWfa76uBSSDaQQxEBnXoqMf2PGoWjJTCmT-Dttmkw",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
+```
