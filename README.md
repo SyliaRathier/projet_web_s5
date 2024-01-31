@@ -154,6 +154,8 @@ npm run dev
 ```
 * Autres informations : Dans le fichier .zip que nous avons rendu pour Vue.js, les URLs pour l'API sont celles du serveur de l'IUT. Il faudra donc changer les URLs pour le faire fonctionner avec l'API en local.
 
+**Base de données de l'API :** 
 
+![data](https://hackmd.io/_uploads/HyHKaiP9T.png)
 
 
