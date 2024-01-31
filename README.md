@@ -64,66 +64,95 @@ Idnetifiants de test :
 login: sarahb,
 password: Sarahbettinger2002
 
-**Pour l'API**
-Guide d'installation en local
-Pour faire fonctionner le projet en local, suivez ces étapes :
 
-Installation de Docker:
-Assurez-vous d'avoir Docker installé sur votre machine. Si ce n'est pas le cas, vous pouvez le télécharger ici.
 
-Création de la base de données:
-Utilisez le fichier docker-compose.yml pour créer la base de données en exécutant la commande suivante dans le répertoire du projet :
 
-docker-compose up -d
 
-Installation de Composer:
-Si ce n'est pas déjà fait, installez Composer en exécutant la commande suivante dans le répertoire du projet :
+**Guide d'Installation** :
 
-composer install
+**MyAvatar:**
 
-Configuration du fichier .env:
-Dans le fichier .env, assurez-vous de spécifier l'URL correcte pour la base de données Docker.
+Pour utiliser MyAvatar en local, suivez ces étapes :
 
-Création de la base de données:
-Utilisez Doctrine pour créer la base de données en exécutant les commandes suivantes :
-
-php bin/console doctrine:database:create
-
-Migration de la base de données:
-Générez et appliquez les migrations avec les commandes suivantes :
-
+* Clonez ce dépôt sur votre machine locale.
+* Installez les dépendances avec la commande : 
+```
+composer install && npm i
+```
+* Installez Tailwind CSS : 
+```
+npm install -D tailwindcss && npx tailwindcss init
+```
+* Créez un fichier .env et configurez les variables d'environnement avec les informations de votre base de données, ainsi que pour le serveur de messagerie de développement : MAILER_DSN=smtp://localhost:1025.
+* Exécutez les migrations pour créer la base de données :
+```
+php bin/console database:create
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
-
-Lancement du serveur Symfony:
-Démarrez le serveur Symfony avec la commande suivante :
-
+```
+* Lancez l'application : 
+```
 symfony server:start
+```
+* Lancez Mail Dev : 
+```
+docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+```
 
-Vous devriez maintenant pouvoir accéder à votre application localement à l'adresse spécifiée par Symfony.
+**API COMSMETIPS:**
+Pour utiliser l'API en local, suivez ces étapes :
 
-**Pour MyAvatar**
-Clonez ce dépôt sur votre machine locale.
-   
-Installez les dépendances avec la commande : composer install && npm i
+* Clonez le projet depuis le dépôt GitHub ou récupérez le projet depuis le fichier .zip.
+* Exécutez la commande composer avec la commande :
+```
+composer install
+```
+* Pour la base de données, récupérez le fichier docker-compose.yml et lancez-le avec la commande :
+```
+ docker compose up -d.
+```
+* Dans le fichier doctrine.yaml, configurez les ports et les informations sur la base de données. (Normalement déjà fait dans le fichier .zip)
+* Dans le fichier .env, mettez la bonne URL pour la base de données : DATABASE_URL="mysql://root:root@localhost:3307/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+* Pour créer la base de données avec Doctrine, exécutez les commandes :
 
-Installer tailwind css npm install -D tailwindcss && npx tailwindcss init
+```
+php bin/console doctrine:database:create
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+```
+* Lancez le serveur avec la commande : 
+```
+symfony server:start
+```
+* Vous devriez pouvoir accéder au site via l'URL proposée par Symfony. L'URL /api permet de voir l'API.
 
-Créez un fichier .env et configurez les variables d'environnement avec votre base de donnée et le ceci pour mail dev : MAILER_DSN=smtp://localhost:1025 .
+*Paiement et Passage au Statut Premium:*
 
-Exécutez les migrations pour créer la base de données : php bin/console database:create && php bin/console make:migration && php bin/console doctrine:migrations:migrate
+* Lancer la commande :
 
-Lancez l'application : symfony server:start
+```
+stripe listen --forward-to https://webinfo.iutmontp.univ-montp2.fr/~rathiers/projet_web/public/webhook/stripe
+```
+* Vous pouvez utiliser de fausses cartes proposées par Stripe pour tester le paiement : Cartes de Test Stripe
 
-Lancez Mail Dev :  docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+**VueJs COSMETIPS:**
+Pour utiliser VueJs en local, suivez ces étapes :
 
-**Pour le vue.js**
-
-Récupérer le projet vue.js
-
-Installer npm avec npm install
-
-Pour lancer le server faire la commande npm run dev
+* Clonez le projet depuis le dépôt GitHub ou récupérez le projet depuis le fichier .zip.
+* Exécutez la commande : 
+```
+npm install
+```
+* Exécutez les commandes : 
+```
+npm install crypto-js
+npm i vue-jwt-decode
+```
+* Pour lancer le serveur, exécutez la commande : 
+```
+npm run dev
+```
+* Autres informations : Dans le fichier .zip que nous avons rendu pour Vue.js, les URLs pour l'API sont celles du serveur de l'IUT. Il faudra donc changer les URLs pour le faire fonctionner avec l'API en local.
 
 
 
