@@ -64,3 +64,67 @@ Idnetifiants de test :
 login: sarahb,
 password: Sarahbettinger2002
 
+**Pour l'API**
+Guide d'installation en local
+Pour faire fonctionner le projet en local, suivez ces étapes :
+
+Installation de Docker:
+Assurez-vous d'avoir Docker installé sur votre machine. Si ce n'est pas le cas, vous pouvez le télécharger ici.
+
+Création de la base de données:
+Utilisez le fichier docker-compose.yml pour créer la base de données en exécutant la commande suivante dans le répertoire du projet :
+
+docker-compose up -d
+
+Installation de Composer:
+Si ce n'est pas déjà fait, installez Composer en exécutant la commande suivante dans le répertoire du projet :
+
+composer install
+
+Configuration du fichier .env:
+Dans le fichier .env, assurez-vous de spécifier l'URL correcte pour la base de données Docker.
+
+Création de la base de données:
+Utilisez Doctrine pour créer la base de données en exécutant les commandes suivantes :
+
+php bin/console doctrine:database:create
+
+Migration de la base de données:
+Générez et appliquez les migrations avec les commandes suivantes :
+
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+
+Lancement du serveur Symfony:
+Démarrez le serveur Symfony avec la commande suivante :
+
+symfony server:start
+
+Vous devriez maintenant pouvoir accéder à votre application localement à l'adresse spécifiée par Symfony.
+
+**Pour MyAvatar**
+Clonez ce dépôt sur votre machine locale.
+   
+Installez les dépendances avec la commande : composer install && npm i
+
+Installer tailwind css npm install -D tailwindcss && npx tailwindcss init
+
+Créez un fichier .env et configurez les variables d'environnement avec votre base de donnée et le ceci pour mail dev : MAILER_DSN=smtp://localhost:1025 .
+
+Exécutez les migrations pour créer la base de données : php bin/console database:create && php bin/console make:migration && php bin/console doctrine:migrations:migrate
+
+Lancez l'application : symfony server:start
+
+Lancez Mail Dev :  docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+
+**Pour le vue.js**
+
+Récupérer le projet vue.js
+
+Installer npm avec npm install
+
+Pour lancer le server faire la commande npm run dev
+
+
+
+
